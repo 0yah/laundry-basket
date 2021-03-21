@@ -33,5 +33,6 @@ def register(request):
 
 class ItemListView(generic.ListView):
     model = Item
+    context_object_name = "items"
     template_name = 'main/item_list.html'
 

@@ -1,5 +1,102 @@
 {%extends 'base.html' %}
-{% block content%}
+{% block content %}
 
-<h1>fjkdfkjjk</h1>
+<div class="container-fluid  he">
+
+
+
+  <div class="position-absolute top-50 start-50 translate-middle">
+  <h1 class="display-2 text-center">Laundry Basket</h1>
+  </div>
+{% load static %}
+<img src="{% static 'img/indexh.jpg' %}" alt="My image">
+</div>
+
+
+
+<div class="container">
+<div class="row">
+<div class="col-md p-3">
+    <div class="card p-3">
+    <h1 class="display-6">Services</h1>
+        <p>
+    {% lorem 1  %}
+    </p>
+    </div>
+</div>
+
+<div class="col-md p-3">
+    <div class="card p-3">
+    <h1 class="display-6">Why Us</h1>
+    <p>
+    {% lorem  %}
+    </p>
+    
+    </div>
+</div>
+
+<div class="col-md p-3">
+    <div class="card p-3">
+    <h1 class="display-6">Services</h1>
+        <p>
+    {% lorem 1  %}
+    </p>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="container">
+<div class="row">
+<div class="col-md  p-3">
+    <div class="card p-3">
+    <h1 class="display-6">Mission</h1>
+        <p>
+    {% lorem 1  %}
+    </p>
+    </div>
+</div>
+
+<div class="col-md p-3">
+    <div class="card p-3">
+    <h1 class="display-6">Vision</h1>
+        <p>
+    {% lorem 1  %}
+    </p>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+<div class="container-fluid bg-light footer">
+  <div class="row">
+    <div class="col-md m-3">
+      <span>Quick Links</span>
+      <span class="d-block">Home</span>
+<span class="d-block">Items</span>
+<span class="d-block">Login</span>
+      
+    </div>
+    <div class="col-md m-3">
+            <span>Services</span>
+            <span class="d-block">Dry cleaning</span>
+            <span class="d-block">Laundry</span>
+            <span class="d-block">Cordwaining</span>
+           
+    </div>
+
+        <div class="col-md m-3">
+            <span>Contact Us</span>
+            <span class="d-block">Privacy Policy</span>
+            <span class="d-block">Careers</span>
+           
+    </div>
+
+  </div>
+</div>
 {% endblock %}

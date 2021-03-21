@@ -26,9 +26,9 @@ class CustomUserCreationForm(UserCreationForm):
     phone = forms.CharField(label="Phone Number", widget=forms.TextInput
                             (attrs={'class': 'form-control', 'placeholder': 'Phone Number', 'id': 'phone'}))
 
-    password1 = forms.CharField(label="Phone Number", widget=forms.PasswordInput
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput
                                 (attrs={'class': 'form-control', 'placeholder': 'Password', 'id': 'pass1'}))
-    password2 = forms.CharField(label="Phone Number", widget=forms.PasswordInput
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput
                                 (attrs={'class': 'form-control', 'placeholder': 'Confirm Password', 'id': 'pass2'}))
 
     def clean_phone(self):

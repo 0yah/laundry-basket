@@ -2,20 +2,18 @@
 
 {% block content %}
 
-<div class="container container-fluid">
-<form method="post">
+
+<div class="container">
+<form class="row g-3">
 {% csrf_token %}
 
+  <div class="col-md-6">
+    <label for="validationServerUsername" class="form-label">{{ form.first_name.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.first_name }}
+    </div>
 
-
-<div class="form-group">
-
-
-
-    <label for="first_name">First Name:</label>
-    {{ form.first_name }}
-      <div class="invalid-feedback">Please fill out this field.</div>
-     {% if form.first_name.errors %}
+         {% if form.first_name.errors %}
                 <div class="error">
                     {% for error in form.first_name.errors %}
                     <span>{{ error|escape }}</span>
@@ -25,101 +23,86 @@
 
   </div>
 
-<div class="form-group">
-    <label for="last_name">Last Name:</label>
-    {{ form.last_name }}
-  </div>
-
-    <div class="form-group">
-    <label for="email">Email:</label>
-        {{ form.email }}
-  </div>
-
-  <div class="form-group">
-    <label for="phone">Phone:</label>
-    {{ form.phone }}
-  </div>
-  <div class="form-group">
-    <label for="pass1">Password:</label>
-    {{ form.password1 }}
-  </div>
-
-    <div class="form-group">
-    <label for="pass2">Confirm Password:</label>
-{{ form.password2 }}
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-
-</div>
-
-
-<div class="container">
-<form class="row g-3">
-
-  <div class="col-md-6">
-    <label for="validationServerUsername" class="form-label">{{ form.first_name.label }}</label>
-    <div class="input-group has-validation">
-      {{ form.first_name }}
-    </div>
-  </div>
-
     <div class="col-md-6">
-    <label for="validationServerUsername" class="form-label">Username</label>
+    <label for="validationServerUsername" class="form-label">{{ form.last_name.label }}</label>
     <div class="input-group has-validation">
-      <input type="text" class="form-control is-invalid" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required>
-      <div id="validationServerUsernameFeedback" class="invalid-feedback">
-        Please choose a username.
-      </div>
+      {{ form.last_name }}
     </div>
+         {% if form.last_name.errors %}
+                <div class="error">
+                    {% for error in form.last_name.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
   </div>
 
 
-  <div class="col-md-8">
-    <label for="validationServerUsername" class="form-label">Username</label>
+    <div class="col-md-12">
+    <label for="validationServerUsername" class="form-label">{{ form.email.label }}</label>
     <div class="input-group has-validation">
-      <input type="text" class="form-control is-invalid" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required>
-      <div id="validationServerUsernameFeedback" class="invalid-feedback">
-        Please choose a username.
-      </div>
+      {{ form.email }}
     </div>
-  </div>
-  <div class="col-md-8">
-    <label for="validationServer03" class="form-label">City</label>
-    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
-    <div id="validationServer03Feedback" class="invalid-feedback">
-      Please provide a valid city.
-    </div>
+
+             {% if form.email.errors %}
+                <div class="error">
+                    {% for error in form.email.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
   </div>
 
-    <div class="col-md-8">
-    <label for="validationServerUsername" class="form-label">Username</label>
+      <div class="col-md-12">
+    <label for="validationServerUsername" class="form-label">{{ form.phone.label }}</label>
     <div class="input-group has-validation">
-      <input type="text" class="form-control is-invalid" id="validationServerUsername" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" required>
-      <div id="validationServerUsernameFeedback" class="invalid-feedback">
-        Please choose a username.
-      </div>
+      {{ form.phone }}
     </div>
+
+    {% if form.phone.errors %}
+                <div class="error">
+                    {% for error in form.phone.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
   </div>
-  <div class="col-md-8">
-    <label for="validationServer03" class="form-label">City</label>
-    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
-    <div id="validationServer03Feedback" class="invalid-feedback">
-      Please provide a valid city.
+
+  <div class="col-md-12">
+    <label for="validationServerUsername" class="form-label">{{ form.password1.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.password1 }}
     </div>
+        {% if form.password1.errors %}
+                <div class="error">
+                    {% for error in form.password1.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
   </div>
 
     <div class="col-md-12">
-    <label for="validationServer03" class="form-label">Email</label>
-    <input type="text" class="form-control is-invalid" id="validationServer03" aria-describedby="validationServer03Feedback" required>
-    <div id="validationServer03Feedback" class="invalid-feedback">
-      Please provide a valid city.
+    <label for="validationServerUsername" class="form-label">{{ form.password2.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.password2 }}
     </div>
+
+            {% if form.password2.errors %}
+                <div class="error">
+                    {% for error in form.password2.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
   </div>
+
+
+
   <div class="col-12">
-    <button class="btn btn-primary" type="submit">Submit form</button>
+    <button class="btn btn-primary" type="submit">Create Account</button>
   </div>
+
 </form>
 </div>
 

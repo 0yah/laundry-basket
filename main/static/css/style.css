@@ -1,0 +1,39 @@
+.footer{
+}
+
+.he{
+    margin: 0;
+    padding: 0;
+    
+  background-image: url("../img/indexh.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 70vh;
+}
+.he img{
+    height:  auto;
+    width: 100%;
+    display: none;
+}
+
+@media only screen  and (max-width:600px){
+
+    .he{
+        margin: 0;
+        padding: 0;
+        
+      background-image: none;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      height: fit-content;
+    }
+    .he img{
+        height:  auto;
+        width: 100%;
+        display: block;
+    }
+}
