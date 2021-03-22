@@ -13,6 +13,8 @@
       {% load static %}
       
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
 
@@ -28,6 +30,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'pricelist' %}">Our Prices</a>
         </li>
+
+{% if user.is_authenticated %}
+                <li class="nav-item">
+          <a class="nav-link" href="{% url 'order' %}">Schedule Pick up</a>
+        </li>
+{% endif %}
+
       </ul>
 
 

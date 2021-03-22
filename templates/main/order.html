@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<div class="container"> 
+</div>
+
+<script>
+
+
+function addCart(index){
+
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+
+      console.log(this.responseText);
+    }
+  };
+  xhttp.open("GET", `addcart/${index}`, true);
+  xhttp.send();
+
+}
+
+function createTable(data){
+
+var table = document.createElement("table");  
+table.className = "table table-hover";
+var thead = document.createElement("thead");  
+var theadrw = document.createElement("tr");  
+
+var theadrwth1 = document.createElement("th");  
+theadrwth1.setAttribute("scope","col");
+theadrwth1.innerHTML = "Name";
+
+var theadrwth2 = document.createElement("th");  
+theadrwth2.setAttribute("scope","col");
+theadrwth2.innerHTML = "Price (KES)";
+
+theadrw.appendChild(theadrwth1);
+theadrw.appendChild(theadrwth2);
+
+var tbody = document.createElement("tbody");
+
+data.map((item,index)=>{
+    var itemRow = document.createElement("tr");
+    itemRow.onclick = function(event){
+        addCart(item.pk);
+
+    }
+    var itemData1 = document.createElement("td");
+    itemData1.innerHTML = item.name;
+
+    var itemData2 = document.createElement("td");
+    itemData2.innerHTML = item.price;
+
+
+    itemRow.appendChild(itemData1);
+    itemRow.appendChild(itemData2);
+    tbody.appendChild(itemRow);
+});
+
+
+thead.appendChild(theadrw);
+table.appendChild(thead);
+table.appendChild(tbody);
+
+$('.container').append(table);
+
+
+console.log(data);
+
+}
+  var xhttp = new XMLHttpRequest();
+  var response = null;
+  var data = [];
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      response = JSON.parse( this.responseText );
+      response.map((item,index)=>{
+          var {fields} = item;
+          var field = fields;
+          field.pk = item.pk;
+          data.push(fields);
+      });
+      
+
+      createTable(data);
+      
+
+    }
+  };
+  xhttp.open("GET", "jsonitems");
+  xhttp.send();
+</script>
+
+{% endblock content %}
