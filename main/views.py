@@ -48,29 +48,46 @@ def order(request):
 
 def load_items(request):
 
+    testMe =Item.objects.all().values_list('pk', flat=True)
+
+    teste =Item.objects.exclude(pk__in=[2,3]).values_list('pk', flat=True)
+    #print(teste)
+    
+    #print(testMe)
+
     items = serializers.serialize("json", Item.objects.all())
     data = json.loads(items)
     return JsonResponse(data, safe=False)
 
 
 def add_cart(request, pk):
+    teste =Item.objects.exclude(pk__in=[2,3]).values_list('pk', flat=True)
+    #print(teste)
+
+    #Find the item
     add_item = Item.objects.get(pk=pk)
-    #request.session['total'] = add_item.price
+    
+    print(add_item)
+    #Get cart items from session
+    cart_items = request.session.get("items", [])
+    #Add item to session
+    cart_items.append({'pk':add_item.pk,'name': add_item.name, 'price': add_item.price})
+    #Save the session
+    request.session['items'] = cart_items
 
-    test_cart = [
-        {'name': 'Ian', 'price': 9},
-        {'name': 'Jan', 'price': 19},
-        {'name': 'sdkjnkj', 'price': 9}
-    ]
+    print(cart_items)
 
-    test_new_data = {
-                {'name': 'Ian', 'price': 9}
-    }
+    #Get the total
+    total = request.session.get("total", 0)
+    #Add the total
+    request.session['total'] = add_item.price + total
 
-    print(test_new_data in test_cart)
-    #request.session['items'] = add_item.price
 
-    #print()
+    #Store saved Items IDs
+    pks = request.session.get("pks", [])
+    pks.append(pk)
+    request.session['pks'] = pks
+
 
     items = serializers.serialize("json", Item.objects.all())
     data = json.loads(items)
