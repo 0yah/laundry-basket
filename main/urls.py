@@ -8,6 +8,8 @@ urlpatterns = [
     path('items',views.ItemListView.as_view(),name="pricelist"),
     path('order',views.order,name="order"),
     path('jsonitems',views.load_items,name="jsonlist"),
+    
+    path('cart', views.cart,name="cart"),
     url(r'^addcart/(?P<pk>\w{0,50})/$',views.add_cart,name="jsonlist"),
     path('accounts/register', views.register, name="register"),
     path('accounts/', include('django.contrib.auth.urls')),

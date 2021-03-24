@@ -4,10 +4,10 @@ from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import generic
-from .models import Item
+from .models import Item, Location, Order, OrderDetail
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import CustomUserCreationForm
+from .forms import CartForm, CustomUserCreationForm
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -16,7 +16,6 @@ from django.core import serializers
 
 def index(request):
     return render(request, 'main/index.html')
-
 
 def register(request):
 
@@ -47,31 +46,56 @@ def order(request):
 
 
 def load_items(request):
+    """
+    del request.session['pks']
+    del request.session['items']
+    del request.session['total']
+    """
+    pks = request.session.get("pks", [])
 
-    testMe =Item.objects.all().values_list('pk', flat=True)
-
-    teste =Item.objects.exclude(pk__in=[2,3]).values_list('pk', flat=True)
-    #print(teste)
     
-    #print(testMe)
-
-    items = serializers.serialize("json", Item.objects.all())
+    items = serializers.serialize("json", Item.objects.exclude(pk__in=pks))
     data = json.loads(items)
+        
     return JsonResponse(data, safe=False)
 
 
+def isAdded(list,item):
+    try:
+        t =list.index(item)
+        return t
+    except ValueError:
+        return False
+
+
+
+
 def add_cart(request, pk):
-    teste =Item.objects.exclude(pk__in=[2,3]).values_list('pk', flat=True)
-    #print(teste)
+
+    #Get saved Items IDs
+    pks = request.session.get("pks", [])
+    #Store saved Items IDs
+    request.session['pks'] = pks
+
+    inCart = isAdded(pks,pk)
+
+    # If the item is already in the cart return the correct items
+    if inCart:
+        items = serializers.serialize("json", Item.objects.exclude(pk__in=pks))
+        data = json.loads(items)
+        print(len(data))
+        return JsonResponse(data, safe=False)
+    
+    pks.append(pk)
+    items = Item.objects.exclude(pk__in=pks).values_list('pk', flat=True)
 
     #Find the item
     add_item = Item.objects.get(pk=pk)
-    
     print(add_item)
     #Get cart items from session
     cart_items = request.session.get("items", [])
     #Add item to session
-    cart_items.append({'pk':add_item.pk,'name': add_item.name, 'price': add_item.price})
+    cart_items.append({'pk':add_item.pk,'name': add_item.name, 'price': add_item.price,'quantity':1})
     #Save the session
     request.session['items'] = cart_items
 
@@ -83,12 +107,45 @@ def add_cart(request, pk):
     request.session['total'] = add_item.price + total
 
 
-    #Store saved Items IDs
-    pks = request.session.get("pks", [])
-    pks.append(pk)
-    request.session['pks'] = pks
-
-
-    items = serializers.serialize("json", Item.objects.all())
+    items = serializers.serialize("json", Item.objects.exclude(pk__in=pks))
     data = json.loads(items)
     return JsonResponse(data, safe=False)
+
+
+def cart(request):
+
+
+    
+    form = CartForm()
+
+    if request.method == 'POST':
+        form = CartForm(request.POST)
+        if form.is_valid():
+            cart_items = request.session.get("items")
+            total_price = request.session.get("total")
+                        
+            pin = form.cleaned_data['pin']
+            street = form.cleaned_data['street']
+            floor = form.cleaned_data['floor']
+            apt = form.cleaned_data['apt']
+            
+            orderLocation = Location(pin=pin,street=street,apt=apt,floor=floor)
+            orderLocation.save()
+            order=Order(location=orderLocation,customer=request.user,price=total_price)
+            print(orderLocation)
+
+            orderDetails=[OrderDetail(item=item["pk"],order=order,quantity=item["pk"]) for item in cart_items]
+            OrderDetail.objects.bulk_create(orderDetails)
+            
+
+
+            
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'main/cart.html',context)
+        
+
+

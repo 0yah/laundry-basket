@@ -6,6 +6,11 @@
 
 <div class="container"> 
 </div>
+<button class="btn btn-outline-primary">
+Proceed to cart
+</button>
+
+
 
 <script>
 
@@ -16,8 +21,22 @@ function addCart(index){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+let data = [];
+  
+response = JSON.parse( this.responseText );
+      response.map((item,index)=>{
+          var {fields} = item;
+          var field = fields;
+          field.pk = item.pk;
+          data.push(fields);
+      });
+      
 
-      console.log(this.responseText);
+      console.log(data);
+      createTable(data,true);
+      var ProceedButton = document.createElement("button");  
+      ProceedButton.className = "btn btn-outline-primary";
+
     }
   };
   xhttp.open("GET", `addcart/${index}`, true);
@@ -25,7 +44,7 @@ function addCart(index){
 
 }
 
-function createTable(data){
+function createTable(data,cartItems = false){
 
 var table = document.createElement("table");  
 table.className = "table table-hover";
@@ -49,7 +68,6 @@ data.map((item,index)=>{
     var itemRow = document.createElement("tr");
     itemRow.onclick = function(event){
         addCart(item.pk);
-
     }
     var itemData1 = document.createElement("td");
     itemData1.innerHTML = item.name;
@@ -68,18 +86,28 @@ thead.appendChild(theadrw);
 table.appendChild(thead);
 table.appendChild(tbody);
 
+$('.container').empty();
 $('.container').append(table);
+if(cartItems){
+      var ProceedButton = document.createElement("button");  
+      ProceedButton.className = "btn btn-outline-primary";
+      
+}
+
 
 
 console.log(data);
 
 }
+
   var xhttp = new XMLHttpRequest();
   var response = null;
-  var data = [];
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
+      let data = [];
+  
       response = JSON.parse( this.responseText );
+
       response.map((item,index)=>{
           var {fields} = item;
           var field = fields;
@@ -90,7 +118,6 @@ console.log(data);
 
       createTable(data);
       
-
     }
   };
   xhttp.open("GET", "jsonitems");

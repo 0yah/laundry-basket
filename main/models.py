@@ -62,10 +62,9 @@ class Mpesa(models.Model):
 class Location(models.Model):
     
     pin = models.PointField(blank=True,null=True)
-    #Must be filled if point is NULL || Blank
-    floor = models.CharField(blank=True,help_text="Floor Number",max_length=30)
-    street = models.CharField(blank=True,null=True,help_text="Street Address",max_length=30)
-    apt = models.CharField(blank=True,null=True,help_text="Apartment",max_length=30)
+    floor = models.CharField(help_text="Floor Number",max_length=30,default="")
+    street = models.CharField(help_text="Street Address",max_length=30,default="")
+    apt = models.CharField(help_text="Apartment",max_length=30,default="")
     
 class Order(models.Model):
     ORDER_STATUS = [
@@ -80,15 +79,15 @@ class Order(models.Model):
     ]
     customer = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     status = models.CharField(choices=ORDER_STATUS,default="IN",max_length=30)
-    pickedDay = models.DateTimeField()
-    deliveryDay = models.DateField()
-    price = models.FloatField()
-    payment = models.ForeignKey(Mpesa,on_delete=models.CASCADE)
-    location = models.ForeignKey(Location,on_delete=models.CASCADE)
+    pickedDay = models.DateTimeField(blank=True,null=True)
+    deliveryDay = models.DateField(blank=True,null=True)
+    price = models.FloatField(default=0.0)
+    payment = models.ForeignKey("Mpesa",on_delete=models.CASCADE,blank=True,null=True)
+    location = models.ForeignKey(Location,on_delete=models.CASCADE,blank=True,null=True)
 
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
-    item = models.ForeignKey(Item,on_delete=models.CASCADE)
+    order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True)
+    item = models.ForeignKey(Item,on_delete=models.CASCADE,blank=True,null=True)
     quantity = models.IntegerField(default=1)
 
 

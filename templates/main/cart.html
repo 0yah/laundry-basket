@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{{ form.media }}
+
+<div class="container">
+<form class="row g-3" method="post">
+{% csrf_token %}
+
+  <div class="col-md-6">
+    <label for="validationServerUsername" class="form-label">{{ form.floor.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.floor }}
+    </div>
+
+         {% if form.floor.errors %}
+                <div class="error">
+                    {% for error in form.floor.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
+
+  </div>
+
+    <div class="col-md-6">
+    <label for="validationServerUsername" class="form-label">{{ form.street.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.street }}
+    </div>
+         {% if form.street.errors %}
+                <div class="error">
+                    {% for error in form.street.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
+  </div>
+
+
+    <div class="col-md-12">
+    <label for="validationServerUsername" class="form-label">{{ form.apt.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.apt }}
+    </div>
+
+             {% if form.apt.errors %}
+                <div class="error">
+                    {% for error in form.apt.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
+  </div>
+
+
+    <div class="col-md-12">
+    <label for="validationServerUsername" class="form-label">{{ form.pin.label }}</label>
+    <div class="input-group has-validation">
+      {{ form.pin }}
+    </div>
+
+            {% if form.pin.errors %}
+                <div class="error">
+                    {% for error in form.pin.errors %}
+                    <span>{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+    {% endif %}
+  </div>
+
+
+
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Create Account</button>
+  </div>
+
+</form>
+</div>
+
+
+
+
+{% endblock content %}
