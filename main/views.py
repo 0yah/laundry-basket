@@ -47,10 +47,13 @@ def order(request):
 
 def load_items(request):
     """
+   
     del request.session['pks']
     del request.session['items']
     del request.session['total']
+   
     """
+
     pks = request.session.get("pks", [])
 
     
@@ -113,7 +116,13 @@ def add_cart(request, pk):
 
 
 def cart(request):
+    cart_items = request.session.get("items")
+    pks = request.session.get("pks")        
+    items = Item.objects.filter(id__in=pks)
+    [print(item.pk) for item in items]
 
+    [print(cart_items[index]["quantity"],cart_item) for index,cart_item in enumerate(items)]
+            
 
     
     form = CartForm()
@@ -123,18 +132,23 @@ def cart(request):
         if form.is_valid():
             cart_items = request.session.get("items")
             total_price = request.session.get("total")
+            pks = request.session.get("pks")
                         
             pin = form.cleaned_data['pin']
             street = form.cleaned_data['street']
             floor = form.cleaned_data['floor']
             apt = form.cleaned_data['apt']
+
             
             orderLocation = Location(pin=pin,street=street,apt=apt,floor=floor)
             orderLocation.save()
             order=Order(location=orderLocation,customer=request.user,price=total_price)
+            order.save()
             print(orderLocation)
 
-            orderDetails=[OrderDetail(item=item["pk"],order=order,quantity=item["pk"]) for item in cart_items]
+            items = Item.objects.filter(id__in=pks)
+            orderDetails=[OrderDetail(item=cart_item,order=order,quantity=cart_items[index]["quantity"]) for index,cart_item in enumerate(items)]
+    
             OrderDetail.objects.bulk_create(orderDetails)
             
 

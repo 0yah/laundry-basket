@@ -85,6 +85,8 @@ class Order(models.Model):
     payment = models.ForeignKey("Mpesa",on_delete=models.CASCADE,blank=True,null=True)
     location = models.ForeignKey(Location,on_delete=models.CASCADE,blank=True,null=True)
 
+    def __str__(self) -> str:
+        return f'{self.customer.first_name} {self.customer.last_name}'
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True)
     item = models.ForeignKey(Item,on_delete=models.CASCADE,blank=True,null=True)
