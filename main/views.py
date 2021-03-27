@@ -162,4 +162,10 @@ def cart(request):
     return render(request, 'main/cart.html',context)
         
 
+def jobs(request):
+    context = {
+        'title':'Careers'
+    }
+    return render(request,'main/jobs.html',context)
+
 
