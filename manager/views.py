@@ -25,3 +25,7 @@ class RiderListView(ListView):
 class OrderListView(ListView):
     model = Order
     template_name = "orders_list.html"
+
+class ItemCreateView(CreateView):
+    model = Item
+    template_name = ".html"
