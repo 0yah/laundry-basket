@@ -12,10 +12,10 @@
   </thead>
   <tbody>
 
-   {% for order in orders %}
+   {% for item in items %}
         <tr>
-            <td><a href="{% url 'order-details' order.pk %}">{{ order.customer.first_name }} {{ order.customer.last_name }}</a></td>
-            <td>{{ order.price }}</td>
+            <td><a href="{% url 'items-update' item.pk %}">{{ item.name }}</a></td>
+            <td>{{ item.price }}</td>
         </tr>
         {% endfor %}
     </tbody>

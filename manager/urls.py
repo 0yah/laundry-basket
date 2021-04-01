@@ -1,19 +1,18 @@
 from django.conf.urls import url
-from django.urls import path,include
+from django.urls import path, include
 from . import views
 
 
 urlpatterns = [
-    path('',views.index,name="home"),
-    path('items',views.ItemListView.as_view(),name="pricelist"),
-    path('order',views.order,name="order"),
-    path('jsonitems',views.load_items,name="jsonlist"),
-    path('jobs',views.jobs,name="jobs"),
+    path('', views.index, name="home"),
+    path('orders/pending', views.PendingOrderListView.as_view(), name="orders-pending"),
+    path('orders/complete', views.CompleteOrderListView.as_view(), name="orders-complete"),
+    path('orders/details/<int:pk>', views.OrderDetailView.as_view(), name="order-details"),
     
-    path('cart', views.cart,name="cart"),
-    url(r'^addcart/(?P<pk>\w{0,50})/$',views.add_cart,name="jsonlist"),
-    path('accounts/register', views.register, name="register"),
-    path('accounts/', include('django.contrib.auth.urls')),
+    
+    path('items', views.ItemListView.as_view(), name="items"),
+    path('items/create', views.ItemCreateView.as_view(), name="items-create"),
+    path('items/update/<int:pk>', views.ItemUpdateView.as_view(), name="items-update"),
 ]
 
 r'^addcart/(?P<username>\w{0,50})/$'

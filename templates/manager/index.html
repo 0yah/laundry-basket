@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row m-3 gap-3">
+    <div class="col ">
+      <div class="card" style="width: 18rem;">
+  
+  <div class="card-body">
+
+    <p class="fs-1 text-center">{{pending_orders}}</p>
+    
+    <a href="{% url 'orders-pending' %}"><h5 class="card-title">Pending Orders</h5></a>
+  
+
+  </div>
+</div>
+    </div>
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+  
+  <div class="card-body">
+
+    <p class="fs-1 text-center">{{completed_orders}}</p>
+    
+    <a href="{% url 'orders-complete' %}"><h5 class="card-title">Complete Orders</h5></a>
+  
+  </div>
+</div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="width: 18rem;">
+  
+  <div class="card-body">
+
+    <p class="fs-1 text-center">{{riders}}</p>
+
+    <a href="{% url 'items' %}"><h5 class="card-title">Riders</h5></a>
+          
+  </div>
+</div>
+    </div>
+
+<div class="col">
+      <div class="card" style="width: 18rem;">
+  
+  <div class="card-body">
+
+    <p class="fs-1 text-center">{{items}}</p>
+    <a href="{% url 'items' %}"><h5 class="card-title">Items</h5></a>
+        
+  </div>
+</div>
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock content %}
+
+

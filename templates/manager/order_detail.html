@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+<h1>{{order.customer.first_name}} {{order.customer.last_name}}</h1>
+<p>
+{{order.customer.location.street}}
+{{order.customer.location.apt}}
+
+{{order.customer.location.floor}}
+
+</p>
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+      <th scope="col">Name</th>
+      <th scope="col">Price (KES)</th>
+            <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+
+   {% for orderdetail in order.orderdetail_set.all %}
+        <tr>
+            <td>{{orderdetail.item.name}} </td>
+            <td>{{orderdetail.item.price}}</td>
+            <td>{{orderdetail.quantity}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}
