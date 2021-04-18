@@ -12,9 +12,9 @@ urlpatterns = [
     
     path('cart', views.cart,name="cart"),
     url(r'^addcart/(?P<pk>\w{0,50})/$',views.add_cart,name="jsonlist"),
-    path('accounts/register', views.register, name="register"),
-    path('accounts/login', views.login, name="login"),
-    #path('accounts/', include('django.contrib.auth.urls')),
+    path('login', views.signin, name="login"),
+    path('accounts/register', views.register, name="register")
+    
 ]
 
 r'^addcart/(?P<username>\w{0,50})/$'

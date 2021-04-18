@@ -1,5 +1,5 @@
 import json
-from django.contrib.auth import login
+from django.contrib.auth import login,authenticate
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -7,7 +7,7 @@ from django.views import generic
 from .models import Item, Location, Order, OrderDetail
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import CartForm, CustomUserCreationForm
+from .forms import CartForm, CustomUserCreationForm, LoginForm
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -25,6 +25,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         # If the form is valid save the user and redirect them
         if form.is_valid():
+            
             user = form.save()
             login(request, user)
             return redirect(reverse('home'))
@@ -33,6 +34,16 @@ def register(request):
         'form': form,
     }
     return render(request, 'registration/register.html', context)
+
+def signin(request):
+    form = LoginForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'registration/login.html', context)
+
+
 
 
 class ItemListView(generic.ListView):
