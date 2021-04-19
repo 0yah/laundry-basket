@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 import re
 from .models import CustomUser, Location, Order
 from django import forms
@@ -65,15 +65,21 @@ class CustomUserChangeForm(UserChangeForm):
 class CartForm(geoforms.Form):
 
     pin = geoforms.PointField(widget=geoforms.OSMWidget(
-        attrs={'map_width': '100%', 'map_height': 'auto','default_lat':-1.2921,'default_lon':36.8219,'default_zoom':13}))
+        attrs={'map_width': '100%', 'map_height': 'auto', 'default_lat': -1.2921, 'default_lon': 36.8219, 'default_zoom': 13}))
     # Must be filled if point is NULL || Blank
     floor = geoforms.CharField(label="Floor", widget=geoforms.TextInput
-                                 (attrs={'class': 'form-control', 'placeholder': 'Floor', 'id': 'floor'}))
+                               (attrs={'class': 'form-control', 'placeholder': 'Floor', 'id': 'floor'}))
     street = geoforms.CharField(label="Street", widget=geoforms.TextInput
-                                 (attrs={'class': 'form-control', 'placeholder': 'Street', 'id': 'street'}))
+                                (attrs={'class': 'form-control', 'placeholder': 'Street', 'id': 'street'}))
     apt = geoforms.CharField(label="Apartment", widget=geoforms.TextInput
-                                 (attrs={'class': 'form-control', 'placeholder': 'Apartment', 'id': 'apt'}))
+                             (attrs={'class': 'form-control', 'placeholder': 'Apartment', 'id': 'apt'}))
 
-        #geom = geoforms.PolygonField()
+    #geom = geoforms.PolygonField()
 
 
+class LoginForm(AuthenticationForm):
+    email = forms.EmailField(label="Email", widget=forms.TextInput
+                             (attrs={'class': 'form-control', 'placeholder': 'johndoe@example.com',
+                                     'id': 'email'}))
+    password = forms.CharField(label="Password", widget=forms.PasswordInput
+                                (attrs={'class': 'form-control', 'placeholder': 'Password', 'id': 'pass1'}))
