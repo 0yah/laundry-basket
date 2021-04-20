@@ -29,7 +29,7 @@ def register(request):
 
             user = form.save()
             login(request, user)
-            return redirect(reverse('home'))
+            return redirect(reverse('profile'))
 
     context = {
         'form': form,
@@ -49,7 +49,7 @@ def signin(request):
         if user:
             print(user)
             login(request, user)
-            return redirect(reverse('home'))
+            return redirect(reverse('profile'))
 
     form = LoginForm()
     context = {
@@ -66,6 +66,9 @@ class ItemListView(generic.ListView):
 
 def order(request):
     return render(request, 'main/order.html')
+
+def profile(request):
+    return render(request, 'main/profile.html')
 
 
 def load_items(request):
