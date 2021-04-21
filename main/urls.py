@@ -16,5 +16,3 @@ urlpatterns = [
     path('accounts/register', views.register, name="register")
     
 ]
-
-r'^addcart/(?P<username>\w{0,50})/$'

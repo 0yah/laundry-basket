@@ -78,8 +78,9 @@ class CartForm(geoforms.Form):
 
 
 class LoginForm(AuthenticationForm):
-    email = forms.EmailField(label="Email", widget=forms.TextInput
+    username = forms.EmailField(label="Email", widget=forms.TextInput
                              (attrs={'class': 'form-control', 'placeholder': 'johndoe@example.com',
                                      'id': 'email'}))
     password = forms.CharField(label="Password", widget=forms.PasswordInput
                                 (attrs={'class': 'form-control', 'placeholder': 'Password', 'id': 'pass1'}))
+    

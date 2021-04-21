@@ -1,5 +1,5 @@
 import json
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -17,6 +17,7 @@ from django.core import serializers
 def index(request):
     return render(request, 'main/index.html')
 
+
 def register(request):
 
     form = CustomUserCreationForm()
@@ -25,7 +26,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         # If the form is valid save the user and redirect them
         if form.is_valid():
-            
+
             user = form.save()
             login(request, user)
             return redirect(reverse('home'))
@@ -35,15 +36,26 @@ def register(request):
     }
     return render(request, 'registration/register.html', context)
 
-def signin(request):
-    form = LoginForm()
 
+def signin(request):
+    if request.user.is_authenticated:
+        return redirect(reverse('home'))
+
+    if request.method == "POST":
+        
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            print(user)
+            login(request, user)
+            return redirect(reverse('home'))
+
+    form = LoginForm()
     context = {
         'form': form,
     }
     return render(request, 'registration/login.html', context)
-
-
 
 
 class ItemListView(generic.ListView):
@@ -58,40 +70,37 @@ def order(request):
 
 def load_items(request):
     """
-   
+
     del request.session['pks']
     del request.session['items']
     del request.session['total']
-   
+
     """
 
     pks = request.session.get("pks", [])
 
-    
     items = serializers.serialize("json", Item.objects.exclude(pk__in=pks))
     data = json.loads(items)
-        
+
     return JsonResponse(data, safe=False)
 
 
-def isAdded(list,item):
+def isAdded(list, item):
     try:
-        t =list.index(item)
+        t = list.index(item)
         return t
     except ValueError:
         return False
 
 
-
-
 def add_cart(request, pk):
 
-    #Get saved Items IDs
+    # Get saved Items IDs
     pks = request.session.get("pks", [])
-    #Store saved Items IDs
+    # Store saved Items IDs
     request.session['pks'] = pks
 
-    inCart = isAdded(pks,pk)
+    inCart = isAdded(pks, pk)
 
     # If the item is already in the cart return the correct items
     if inCart:
@@ -99,27 +108,27 @@ def add_cart(request, pk):
         data = json.loads(items)
         print(len(data))
         return JsonResponse(data, safe=False)
-    
+
     pks.append(pk)
     items = Item.objects.exclude(pk__in=pks).values_list('pk', flat=True)
 
-    #Find the item
+    # Find the item
     add_item = Item.objects.get(pk=pk)
     print(add_item)
-    #Get cart items from session
+    # Get cart items from session
     cart_items = request.session.get("items", [])
-    #Add item to session
-    cart_items.append({'pk':add_item.pk,'name': add_item.name, 'price': add_item.price,'quantity':1})
-    #Save the session
+    # Add item to session
+    cart_items.append({'pk': add_item.pk, 'name': add_item.name,
+                       'price': add_item.price, 'quantity': 1})
+    # Save the session
     request.session['items'] = cart_items
 
     print(cart_items)
 
-    #Get the total
+    # Get the total
     total = request.session.get("total", 0)
-    #Add the total
+    # Add the total
     request.session['total'] = add_item.price + total
-
 
     items = serializers.serialize("json", Item.objects.exclude(pk__in=pks))
     data = json.loads(items)
@@ -128,14 +137,13 @@ def add_cart(request, pk):
 
 def cart(request):
     cart_items = request.session.get("items")
-    pks = request.session.get("pks")        
+    pks = request.session.get("pks")
     items = Item.objects.filter(id__in=pks)
     [print(item.pk) for item in items]
 
-    [print(cart_items[index]["quantity"],cart_item) for index,cart_item in enumerate(items)]
-            
+    [print(cart_items[index]["quantity"], cart_item)
+     for index, cart_item in enumerate(items)]
 
-    
     form = CartForm()
 
     if request.method == 'POST':
@@ -144,39 +152,35 @@ def cart(request):
             cart_items = request.session.get("items")
             total_price = request.session.get("total")
             pks = request.session.get("pks")
-                        
+
             pin = form.cleaned_data['pin']
             street = form.cleaned_data['street']
             floor = form.cleaned_data['floor']
             apt = form.cleaned_data['apt']
 
-            
-            orderLocation = Location(pin=pin,street=street,apt=apt,floor=floor)
+            orderLocation = Location(
+                pin=pin, street=street, apt=apt, floor=floor)
             orderLocation.save()
-            order=Order(location=orderLocation,customer=request.user,price=total_price)
+            order = Order(location=orderLocation,
+                          customer=request.user, price=total_price)
             order.save()
             print(orderLocation)
 
             items = Item.objects.filter(id__in=pks)
-            orderDetails=[OrderDetail(item=cart_item,order=order,quantity=cart_items[index]["quantity"]) for index,cart_item in enumerate(items)]
-    
+            orderDetails = [OrderDetail(item=cart_item, order=order, quantity=cart_items[index]
+                                        ["quantity"]) for index, cart_item in enumerate(items)]
+
             OrderDetail.objects.bulk_create(orderDetails)
-            
-
-
-            
 
     context = {
         'form': form
     }
 
-    return render(request, 'main/cart.html',context)
-        
+    return render(request, 'main/cart.html', context)
+
 
 def jobs(request):
     context = {
-        'title':'Careers'
+        'title': 'Careers'
     }
-    return render(request,'main/jobs.html',context)
-
-
+    return render(request, 'main/jobs.html', context)
