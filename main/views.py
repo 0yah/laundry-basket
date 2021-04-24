@@ -7,7 +7,7 @@ from django.views import generic
 from .models import Item, Location, Order, OrderDetail
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import CartForm, CustomUserCreationForm, LoginForm
+from .forms import CartForm, CustomUserCreationForm, LoginForm, ProfileForm,CustomUserChangeForm
 from django.http import JsonResponse
 from django.core import serializers
 
@@ -68,7 +68,18 @@ def order(request):
     return render(request, 'main/order.html')
 
 def profile(request):
-    return render(request, 'main/profile.html')
+    if request.method == "POST":
+        form = ProfileForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+            print(form)
+           
+
+    form = ProfileForm(instance=request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'main/profile.html',context)
 
 
 def load_items(request):
@@ -187,3 +198,11 @@ def jobs(request):
         'title': 'Careers'
     }
     return render(request, 'main/jobs.html', context)
+
+
+def history(request):
+    context ={
+
+    }
+    orders =Order()
+    return render(request, 'main/history.html',context)
