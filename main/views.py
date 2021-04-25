@@ -204,5 +204,5 @@ def history(request):
     context ={
 
     }
-    orders =Order()
+    #orders =Order()
     return render(request, 'main/history.html',context)
